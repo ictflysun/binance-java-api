@@ -14,6 +14,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.julienviet</groupId>
+      <artifactId>retrofit-vertx</artifactId>
+      <version>1.1.0</version>
+    </dependency>
+    <dependency>
       <groupId>com.squareup.retrofit2</groupId>
       <artifactId>retrofit</artifactId>
       <version>${com.squareup.retrofit2.version}</version>

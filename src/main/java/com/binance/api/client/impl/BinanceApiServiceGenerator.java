@@ -10,6 +10,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpClient;
+import com.julienviet.retrofit.vertx.VertxCallFactory;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -33,6 +36,23 @@ public class BinanceApiServiceGenerator {
     }
 
     public static <S> S createService(Class<S> serviceClass, String apiKey, String secret) {
+        retrofit = setupAuth(apiKey, secret, retrofit);
+        return retrofit.create(serviceClass);
+    }
+
+    public static <S> S createService(Class<S> serviceClass, String apiKey, String secret, Vertx vertex) {
+        HttpClient client = vertex.createHttpClient();
+        Retrofit vertexRetrofit = new Retrofit.Builder()
+                .callFactory(new VertxCallFactory(client))
+                .baseUrl(BinanceApiConstants.API_BASE_URL)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+
+        vertexRetrofit = setupAuth(apiKey, secret, vertexRetrofit);
+        return vertexRetrofit.create(serviceClass);
+    }
+
+    private static Retrofit setupAuth(String apiKey, String secret, Retrofit retrofit) {
         if (!StringUtils.isEmpty(apiKey) && !StringUtils.isEmpty(secret)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(apiKey, secret);
             if (!httpClient.interceptors().contains(interceptor)) {
@@ -41,7 +61,7 @@ public class BinanceApiServiceGenerator {
                 retrofit = builder.build();
             }
         }
-        return retrofit.create(serviceClass);
+        return retrofit;
     }
 
     /**
