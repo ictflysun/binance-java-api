@@ -3,6 +3,7 @@ package com.binance.api.client;
 import com.binance.api.client.impl.BinanceApiAsyncRestClientImpl;
 import com.binance.api.client.impl.BinanceApiRestClientImpl;
 import com.binance.api.client.impl.BinanceApiWebSocketClientImpl;
+import io.vertx.core.Vertx;
 
 /**
  * A factory for creating BinanceApi client objects.
@@ -56,6 +57,10 @@ public class BinanceApiClientFactory {
    */
   public BinanceApiRestClient newRestClient() {
     return new BinanceApiRestClientImpl(apiKey, secret);
+  }
+
+  public BinanceApiRestClient newRestClient(Vertx vertx) {
+    return new BinanceApiRestClientImpl(apiKey, secret, vertx);
   }
 
   /**

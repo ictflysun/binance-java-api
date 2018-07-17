@@ -21,6 +21,7 @@ import com.binance.api.client.domain.market.CandlestickInterval;
 import com.binance.api.client.domain.market.OrderBook;
 import com.binance.api.client.domain.market.TickerPrice;
 import com.binance.api.client.domain.market.TickerStatistics;
+import io.vertx.core.Vertx;
 
 import java.util.List;
 
@@ -36,6 +37,10 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 
   public BinanceApiRestClientImpl(String apiKey, String secret) {
     binanceApiService = createService(BinanceApiService.class, apiKey, secret);
+  }
+
+  public BinanceApiRestClientImpl(String apiKey, String secret, Vertx vertx) {
+    binanceApiService = createService(BinanceApiService.class, apiKey, secret, vertx);
   }
 
   // General endpoints
